@@ -1,0 +1,1905 @@
+openapi: '3.0.1'
+info:
+  title: PR TIMES HACKATHON API
+  description: |
+    PR TIMES HACKATHON用 API ドキュメント です。
+  version: 2.0.0
+  x-logo:
+    url: 'http://hackathon.stg-prtimes.net/images/logo_2.svg'
+    href: 'https://hackathon.stg-prtimes.net/'
+servers:
+  - url: 'https://hackathon.stg-prtimes.net/api'
+tags:
+  - name: Companies
+    description: 企業情報
+  - name: Releases
+    description: プレスリリース
+  - name: Categories
+    description: カテゴリー
+paths:
+  /companies:
+    get:
+      tags:
+        - Companies
+      security:
+        - bearerAuth: []
+      summary: 企業情報一覧取得API
+      description: 企業情報一覧取得API
+      parameters:
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/company_detail'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/companies" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/companies"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/companies";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /industries/{industry_id}/companies:
+    get:
+      tags:
+        - Companies
+      security:
+        - bearerAuth: []
+      summary: 企業業種ごとの情報一覧取得API
+      description: 企業業種ごとの情報一覧取得API
+      parameters:
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+        - in: path
+          name: industry_id
+          required: true
+          description: 業種ID
+          schema:
+            type: integer
+            example: 5
+            minimum: 1
+            maximum: 16
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/company_detail'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/industries/1/companies" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/industries/1/companies"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/industries/1/companies";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /companies/{company_id}:
+    get:
+      tags:
+        - Companies
+      security:
+        - bearerAuth: []
+      summary: 企業情報取得API
+      description: 企業情報取得API
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          description: 企業ID
+          schema:
+            type: integer
+            example: 112
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/company_detail'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/companies/112" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/companies/112"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/companies/112";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /companies/{company_id}/releases:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: 企業リリース一覧取得API
+      description: 企業リリース一覧取得API
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          description: 企業ID
+          schema:
+            type: integer
+            example: 112
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+        - in: query
+          name: from_date
+          description: 指定期間開始（YYYY-MM-DD、指定なしは本日の日付から1week前）
+          schema:
+            type: string
+            example: '2021-04-01'
+            default: '2022-08-01'
+        - in: query
+          name: to_date
+          description: 指定期間終了（YYYY-MM-DD、指定なしは本日の日付）
+          schema:
+            type: string
+            example: '2021-04-02'
+            default: '2022-08-08'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/press_release'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/companies/112/releases" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/companies/112/releases"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/companies/112/releases";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /companies/{company_id}/releases/{release_id}:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: リリース詳細取得API
+      description: リリース詳細取得API
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          description: 企業ID
+          schema:
+            type: integer
+            example: 112
+        - in: path
+          name: release_id
+          required: true
+          description: リリースID、company_idとの複合ユニーク
+          schema:
+            type: integer
+            example: 1078
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/press_release'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/companies/112/releases/1078" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/companies/112/releases/1078"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/companies/112/releases/1078";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /companies/{company_id}/releases/{release_id}/statistics:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: PV/UU、いいね数取得API
+      description: PV/UU、いいね数取得API
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          description: 企業ID
+          schema:
+            type: integer
+            example: 112
+        - in: path
+          name: release_id
+          required: true
+          description: リリースID、company_idとの複合ユニーク
+          schema:
+            type: integer
+            example: 1078
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/statistics'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/companies/112/releases/1078/statistics" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/companies/112/releases/1078/statistics"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/companies/112/releases/1078/statistics";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /companies/{company_id}/releases/{release_id}/keywords:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: プレスリリース・キーワード取得API
+      description: プレスリリース・キーワード取得API
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          description: 企業ID
+          schema:
+            type: integer
+            example: 112
+        - in: path
+          name: release_id
+          required: true
+          description: リリースID、company_idとの複合ユニーク
+          schema:
+            type: integer
+            example: 1078
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/keyword'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/companies/112/releases/1078/keywords" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/companies/112/releases/1078/keywords"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/companies/112/releases/1078/keywords";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /companies/{company_id}/releases/{release_id}/locations:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: プレスリリース・位置情報取得API
+      description: プレスリリース・位置情報取得API
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          description: 企業ID
+          schema:
+            type: integer
+            example: 112
+        - in: path
+          name: release_id
+          required: true
+          description: リリースID、company_idとの複合ユニーク
+          schema:
+            type: integer
+            example: 1078
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/location'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/companies/112/releases/1078/locations" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/companies/112/releases/1078/locations"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/companies/112/releases/1078/locations";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /prefectures/{prefecture_id}/releases:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: 都道府県ごとのリリース一覧取得API
+      description: 都道府県ごとのリリース一覧取得API
+      parameters:
+        - in: path
+          name: prefecture_id
+          required: true
+          description: 都道府県ID
+          schema:
+            type: integer
+            example: 5
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+        - in: query
+          name: from_date
+          description: 指定期間開始（YYYY-MM-DD、指定なしは本日の日付から1week前）
+          schema:
+            type: string
+            example: '2021-04-01'
+            default: '2022-08-01'
+        - in: query
+          name: to_date
+          description: 指定期間終了（YYYY-MM-DD、指定なしは本日の日付）
+          schema:
+            type: string
+            example: '2021-04-02'
+            default: '2022-08-08'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/press_release'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/prefectures/5/releases" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/prefectures/5/releases"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/prefectures/5/releases";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /releases/movie:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: 動画掲載リリース一覧取得API
+      description: 動画掲載リリース一覧取得API #ToDo: Orderをつけるか？
+      parameters:
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+        - in: query
+          name: from_date
+          description: 指定期間開始（YYYY-MM-DD、指定なしは本日の日付から1week前）
+          schema:
+            type: string
+            example: '2021-04-01'
+            default: '2022-08-01'
+        - in: query
+          name: to_date
+          description: 指定期間終了（YYYY-MM-DD、指定なしは本日の日付）
+          schema:
+            type: string
+            example: '2021-04-02'
+            default: '2022-08-08'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/press_release_with_movie'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/releases/movie" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/releases/movie"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/releases/movie";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /releases:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: 最新順リリース一覧取得API
+      description: 最新順リリース一覧取得API #ToDo: Orderをつけるか？
+      parameters:
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+        - in: query
+          name: from_date
+          description: 指定期間開始（YYYY-MM-DD、指定なしは本日の日付から1week前）
+          schema:
+            type: string
+            example: '2021-04-01'
+            default: '2022-08-01'
+        - in: query
+          name: to_date
+          description: 指定期間終了（YYYY-MM-DD、指定なしは本日の日付）
+          schema:
+            type: string
+            example: '2021-04-02'
+            default: '2022-08-08'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/press_release'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/releases" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/releases"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/releases";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /categories:
+    get:
+      tags:
+        - Categories
+      security:
+        - bearerAuth: []
+      summary: カテゴリーリスト取得API
+      description: カテゴリーリスト取得API
+      parameters:
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/category'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/categories" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/categories"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/categories";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /categories/{category_id}:
+    get:
+      tags:
+        - Categories
+      security:
+        - bearerAuth: []
+      summary: カテゴリー取得API
+      description: カテゴリー取得API
+      parameters:
+        - in: path
+          name: category_id
+          required: true
+          description: カテゴリーid
+          schema:
+            type: integer
+            example: 5
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/categories/5" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/categories/5"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/categories/5";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /categories/{category_id}/releases:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: カテゴリーのプレスリリース一覧取得API
+      description: カテゴリーのプレスリリース一覧取得API
+      parameters:
+        - in: path
+          name: category_id
+          required: true
+          description: カテゴリーid
+          schema:
+            type: integer
+            example: 5
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+        - in: query
+          name: from_date
+          description: 指定期間開始（YYYY-MM-DD、指定なしは本日の日付から1week前）
+          schema:
+            type: string
+            example: '2021-04-01'
+            default: '2022-08-01'
+        - in: query
+          name: to_date
+          description: 指定期間終了（YYYY-MM-DD、指定なしは本日の日付）
+          schema:
+            type: string
+            example: '2021-04-02'
+            default: '2022-08-08'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/press_release'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/categories/5/releases" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/categories/5/releases"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/categories/5/releases";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /categories/{category_id}/releases/movie:
+    get:
+      tags:
+        - Releases
+      security:
+        - bearerAuth: []
+      summary: カテゴリーの動画掲載プレスリリース一覧取得API
+      description: カテゴリーの動画掲載プレスリリース一覧取得API
+      parameters:
+        - in: path
+          name: category_id
+          required: true
+          description: カテゴリーid
+          schema:
+            type: integer
+            example: 5
+        - in: query
+          name: per_page
+          description: The number of results per page (max 999).
+          schema:
+            type: integer
+            example: 30
+            default: 100
+            maximum: 999
+        - in: query
+          name: page
+          description: Page number of the results to fetch (max 99).
+          schema:
+            type: integer
+            example: 1
+            default: 0
+            maximum: 99
+        - in: query
+          name: from_date
+          description: 指定期間開始（YYYY-MM-DD、指定なしは本日の日付から1week前）
+          schema:
+            type: string
+            example: '2021-04-01'
+            default: '2022-08-01'
+        - in: query
+          name: to_date
+          description: 指定期間終了（YYYY-MM-DD、指定なしは本日の日付）
+          schema:
+            type: string
+            example: '2021-04-02'
+            default: '2022-08-08'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/press_release_with_movie'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/categories/5/releases/movie" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/categories/5/releases/movie"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/categories/5/releases/movie";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /prefectures:
+    get:
+      tags:
+        - Prefectures
+      security:
+        - bearerAuth: []
+      summary: 都道府県一覧取得API
+      description: 都道府県一覧取得API
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/prefecture'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/prefectures" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/prefectures"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/prefectures";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+  /release_types:
+    get:
+      tags:
+        - ReleaseTypes
+      security:
+        - bearerAuth: []
+      summary: リリースタイプ一覧取得API
+      description: リリースタイプ一覧取得API
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/release_types'
+      x-codeSamples:
+        - lang: 'cURL'
+          label: 'curl'
+          source: |
+            curl -X GET "https://hackathon.stg-prtimes.net/api/release_types" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer {ACCESS_TOKEN}"
+        - lang: 'python'
+          label: 'Python'
+          source: |
+            import requests
+
+            BASE_URL = "https://hackathon.stg-prtimes.net/api"
+
+            url = BASE_URL + "/release_types"
+            headers = {
+              "Accept": "application/json",
+              "Authorization": f"Bearer {ACCESS_TOKEN}",
+            }
+            res = requests.get(url, headers=headers)
+
+            print(res.json())
+        - lang: 'php'
+          label: 'PHP'
+          source: |
+            <?php
+            declare(strict_types=1);
+            require_once('vendor/autoload.php');
+
+            use Symfony\Component\HttpClient\NativeHttpClient;
+
+            const BASE_URL = "https://hackathon.stg-prtimes.net/api";
+
+            $url = BASE_URL . "/release_types";
+            $options = [
+              "headers" => [
+                "Accept: application/json",
+                "Authorization: Bearer {ACCESS_TOKEN}",
+              ]
+            ];
+            $c = new NativeHttpClient();
+            $res = $c->request("GET", $url, $options);
+
+            var_dump($res->getContent());
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        API を利用するにはBearer認証が必要です。
+
+        token は Slack でお伝えします。
+  schemas:
+    company_detail:
+      title: '企業詳細情報'
+      type: object
+      properties:
+        company_id:
+          type: integer
+          description: 企業ID
+          example: 112
+          x-go-name: CompanyID
+          x-oapi-codegen-extra-tags:
+            db: company_id
+        company_name:
+          type: string
+          description: 企業名
+          example: '株式会社PR TIMES'
+          x-oapi-codegen-extra-tags:
+            db: company_name
+        president_name:
+          type: string
+          description: 代表者名
+          example: '山口拓己'
+          x-oapi-codegen-extra-tags:
+            db: president_name
+        address:
+          type: string
+          description: 住所
+          example: '東京都港区赤坂1-11-44'
+          x-oapi-codegen-extra-tags:
+            db: address
+        phone:
+          type: string
+          description: 電話番号
+          example: '03-5770-7888'
+          x-oapi-codegen-extra-tags:
+            db: phone
+        description:
+          type: string
+          description: 企業説明文
+          example: '「行動者発の情報が、人の心を揺さぶる時代へ」これを実現するためにPR TIMESは存在します。事業を通じてニュースの主役を変えたい、行動者のポジティブなニュースを伝え、働く人を前向きにしたいと考えています。プレスリリース配信サービス「PR TIMES」は日本の情報インフラを目指し、さらにグローバル展開に挑戦します。そして、それを超える事業を生み出す人材が台頭する組織を目指し、行動を続けています。'
+          x-oapi-codegen-extra-tags:
+            db: description
+        industry:
+          type: string
+          description: 業種
+          example: 'サービス業'
+          x-oapi-codegen-extra-tags:
+            db: industry
+        ipo_type:
+          type: string
+          description: 上場区分
+          example: '東証1部' # ToDo 書き換え
+          x-oapi-codegen-extra-tags:
+            db: ipo_type
+        capital:
+          type: integer
+          description: 資本金
+          example: 41829
+          x-oapi-codegen-extra-tags:
+            db: capital
+        foundation_date:
+          type: string
+          description: 設立
+          example: '2005-12'
+          x-oapi-codegen-extra-tags:
+            db: foundation_date
+        url:
+          type: string
+          description: 企業URL
+          example: 'https://www.prtimes.co.jp/'
+          x-go-name: URL
+          x-oapi-codegen-extra-tags:
+            db: url
+        twitter_screen_name:
+          type: string
+          description: Twitterのアカウント名
+          example: 'PRTIMES_JP'
+          x-oapi-codegen-extra-tags:
+            db: twitter_screen_name
+      required:
+        - company_id
+        - company_name
+        - president_name
+        - address
+        - phone
+        - description
+        - industry
+        - ipo_type
+        - capital
+        - foundation_date
+        - url
+        - twitter_screen_name
+    press_release:
+      title: 'プレスリリース情報'
+      type: object
+      properties:
+        company_name:
+          type: string
+          description: 企業名
+          example: '株式会社PR TIMES'
+          x-oapi-codegen-extra-tags:
+            db: company_name
+        company_id:
+          type: integer
+          description: 企業ID
+          example: 1
+          x-go-name: CompanyID
+          x-oapi-codegen-extra-tags:
+            db: company_id
+        release_id:
+          type: integer
+          description: リリースID、company_idとの複合ユニーク
+          example: 1
+          x-go-name: ReleaseID
+          x-oapi-codegen-extra-tags:
+            db: release_id
+        title:
+          type: string
+          description: タイトル
+          example: '[April Dream] 4月1日を夢の日に。1100社超が「夢」の発信に参加表明'
+          x-oapi-codegen-extra-tags:
+            db: title
+        subtitle:
+          type: string
+          description: サブタイトル
+          example: '4月1日、企業の夢がプレスリリースで、個人の夢がSNSで順次発信されます。'
+          x-oapi-codegen-extra-tags:
+            db: subtitle
+        url:
+          type: string
+          description: 企業URL
+          example: 'https://prtimes.jp/main/html/rd/p/000001201.000000112.html'
+          x-go-name: URL
+          x-oapi-codegen-extra-tags:
+            db: url
+        lead_paragraph:
+          type: string
+          description: リード文
+          x-oapi-codegen-extra-tags:
+            db: lead_paragraph
+        body:
+          type: string
+          description: 本文
+          example: '<p id="p-iframe-image-33626-1"><span class="no-edit center" contenteditable="false" id="iframe-image-area-33626-1" style="margin-left: 57.5px; margin-right: 57.5px;" xx="prtimes">...'
+          x-oapi-codegen-extra-tags:
+            db: body
+        main_image:
+          type: string
+          description: サムネイル画像
+          example: 'https://prtimes.jp/i/112/1078/resize/d112-1078-443228-0.jpg'
+          x-oapi-codegen-extra-tags:
+            db: main_image
+        main_image_fastly:
+          type: string
+          description: Fastlyから配信されるサムネイル画像（無い場合もある）
+          example: 'https://prcdn.freetls.fastly.net/release_image/112/1167/112-1167-3219ae855548b936461c3ec288263aed-722x378.png?format=jpeg&auto=webp&quality=85&width=1950&height=1350&fit=bounds'
+          x-oapi-codegen-extra-tags:
+            db: main_image_fastly
+        main_category_id: # ToDo memo プレスリリースで１番目に並んでいるカテゴリー。実態はm_busi_cate_lv2。
+          type: integer
+          description: メインカテゴリーID
+          example: 58
+          x-go-name: MainCategoryID
+          x-oapi-codegen-extra-tags:
+            db: main_category_id
+        main_category_name:
+          type: string
+          description: メインカテゴリー名
+          example: '広告・宣伝・PR'
+          x-oapi-codegen-extra-tags:
+            db: main_category_name
+        sub_category_id: # ToDo memo プレスリリースで１番目に並んでいるカテゴリー。実態はm_busi_cate_lv2。
+          type: integer
+          description: サブカテゴリーID
+          example: 4
+          x-go-name: SubCategoryID
+          x-oapi-codegen-extra-tags:
+            db: sub_category_id
+        sub_category_name:
+          type: string
+          description: サブカテゴリー名
+          example: 'ネットサービス'
+          x-oapi-codegen-extra-tags:
+            db: sub_category_name
+        release_type:
+          type: string
+          description: リリース種類
+          example: '商品サービス'
+          x-go-name: ReleaseType
+          x-oapi-codegen-extra-tags:
+            db: release_type
+        created_at:
+          type: string
+          description: リリース配信日
+          example: '2021-04-01 00:00'
+          x-oapi-codegen-extra-tags:
+            db: created_at
+        like:
+          type: integer
+          description: いいね数
+          example: 10
+          x-oapi-codegen-extra-tags:
+            db: like  
+      required:
+        - company_name
+        - company_id
+        - release_id
+        - title
+        - subtitle
+        - url
+        - lead_paragraph
+        - body
+        - main_image
+        - main_image_fastly
+        - main_category_id
+        - main_category_name
+        - sub_category_id
+        - sub_category_name
+        - release_type
+        - created_at
+        - like
+    press_release_with_movie:
+      title: '動画掲載プレスリリース情報'
+      type: object
+      properties:
+        company_name:
+          type: string
+          description: 企業名
+          example: '株式会社PR TIMES'
+          x-oapi-codegen-extra-tags:
+            db: company_name
+        company_id:
+          type: integer
+          description: 企業ID
+          example: 1
+          x-go-name: CompanyID
+          x-oapi-codegen-extra-tags:
+            db: company_id
+        release_id:
+          type: integer
+          description: リリースID、company_idとの複合ユニーク
+          example: 1
+          x-go-name: ReleaseID
+          x-oapi-codegen-extra-tags:
+            db: release_id
+        title:
+          type: string
+          description: タイトル
+          example: '[April Dream] 4月1日を夢の日に。1100社超が「夢」の発信に参加表明'
+          x-oapi-codegen-extra-tags:
+            db: title
+        subtitle:
+          type: string
+          description: サブタイトル
+          example: '4月1日、企業の夢がプレスリリースで、個人の夢がSNSで順次発信されます。'
+          x-oapi-codegen-extra-tags:
+            db: subtitle
+        url:
+          type: string
+          description: 企業URL
+          example: 'https://prtimes.jp/main/html/rd/p/000001201.000000112.html'
+          x-go-name: URL
+          x-oapi-codegen-extra-tags:
+            db: url
+        lead_paragraph:
+          type: string
+          description: リード文
+          x-oapi-codegen-extra-tags:
+            db: lead_paragraph
+        body:
+          type: string
+          description: 本文
+          example: '<p id="p-iframe-image-33626-1"><span class="no-edit center" contenteditable="false" id="iframe-image-area-33626-1" style="margin-left: 57.5px; margin-right: 57.5px;" xx="prtimes">...'
+          x-oapi-codegen-extra-tags:
+            db: body
+        main_image:
+          type: string
+          description: サムネイル画像
+          example: 'https://prtimes.jp/i/112/1078/resize/d112-1078-443228-0.jpg'
+          x-oapi-codegen-extra-tags:
+            db: main_image
+        main_image_fastly:
+          type: string
+          description: Fastlyから配信されるサムネイル画像（無い場合もある）
+          example: 'https://prcdn.freetls.fastly.net/release_image/112/1167/112-1167-3219ae855548b936461c3ec288263aed-722x378.png?format=jpeg&auto=webp&quality=85&width=1950&height=1350&fit=bounds'
+          x-oapi-codegen-extra-tags:
+            db: main_image_fastly
+        youtube_url:
+          type: string
+          description: youtube URL
+          example: 'https://www.youtube.com/watch?v=6PXeJ2nImyA'
+          x-go-name: Youtube_URL
+          x-oapi-codegen-extra-tags:
+            db: youtube_url
+        main_category_id: # ToDo memo プレスリリースで１番目に並んでいるカテゴリー。実態はm_busi_cate_lv2。
+          type: integer
+          description: メインカテゴリーID
+          example: 58
+          x-go-name: MainCategoryID
+          x-oapi-codegen-extra-tags:
+            db: main_category_id
+        main_category_name:
+          type: string
+          description: メインカテゴリー名
+          example: '広告・宣伝・PR'
+          x-oapi-codegen-extra-tags:
+            db: main_category_name
+        sub_category_id: # ToDo memo プレスリリースで１番目に並んでいるカテゴリー。実態はm_busi_cate_lv2。
+          type: integer
+          description: サブカテゴリーID
+          example: 4
+          x-go-name: SubCategoryID
+          x-oapi-codegen-extra-tags:
+            db: sub_category_id
+        sub_category_name:
+          type: string
+          description: サブカテゴリー名
+          example: 'ネットサービス'
+          x-oapi-codegen-extra-tags:
+            db: sub_category_name
+        release_type:
+          type: string
+          description: リリース種類
+          example: '商品サービス'
+          x-go-name: ReleaseType
+          x-oapi-codegen-extra-tags:
+            db: release_type
+        created_at:
+          type: string
+          description: リリース配信日
+          example: '2021-04-01 00:00'
+          x-oapi-codegen-extra-tags:
+            db: created_at
+        like:
+          type: integer
+          description: いいね数
+          example: 10
+          x-oapi-codegen-extra-tags:
+            db: like
+      required:
+        - company_name
+        - company_id
+        - release_id
+        - title
+        - subtitle
+        - url
+        - lead_paragraph
+        - body
+        - main_image
+        - main_image_fastly
+        - youtube_url
+        - main_category_id
+        - main_category_name
+        - sub_category_id
+        - sub_category_name
+        - release_type
+        - created_at
+        - like
+    category:
+      title: 'カテゴリー情報'
+      type: object
+      properties:
+        id:
+          type: integer
+          description: カテゴリーid
+          example: 5
+          x-go-name: ID
+          x-oapi-codegen-extra-tags:
+            db: id
+        name:
+          type: string
+          description: カテゴリー名
+          example: 'スマートフォンアプリ'
+          x-oapi-codegen-extra-tags:
+            db: name
+      required:
+        - id
+        - name
+    statistics:
+      title: '統計情報'
+      type: object
+      properties:
+        unique_user:
+          type: integer
+          description: ユニークユーザー数
+          example: 2547
+          x-oapi-codegen-extra-tags:
+            db: unique_user
+        page_view:
+          type: integer
+          description: ページビュー数
+          example: 4028
+          x-oapi-codegen-extra-tags:
+            db: page_view
+        like:
+          type: integer
+          description: いいね数
+          example: 10
+          x-oapi-codegen-extra-tags:
+            db: like
+      required:
+        - unique_user
+        - page_view
+        - like
+    keyword:
+      title: 'プレスリリース情報'
+      type: object
+      properties:
+        id:
+          type: integer
+          description: キーワードID
+          example: 45190
+          x-go-name: ID
+          x-oapi-codegen-extra-tags:
+            db: kijineta_tag_id
+        name:
+          type: string
+          description: キーワード名
+          example: 'ハッカソン'
+          x-oapi-codegen-extra-tags:
+            db: kijineta_tag
+        sort_priority:
+          type: integer
+          description: 昇順でソートする優先順位
+          example: 0
+          x-oapi-codegen-extra-tags:
+            db: ordinal_number
+      required:
+        - id
+        - name
+        - sort_priority
+    location:
+      title: 'プレスリリース位置情報'
+      type: object
+      properties:
+        prefecture:
+          type: string
+          description: 都道府県
+          example: '東京都'
+          x-oapi-codegen-extra-tags:
+            db: prefecture
+        city:
+          type: string
+          description: 市区町村
+          example: '港区'
+          x-oapi-codegen-extra-tags:
+            db: city
+        location_category:
+          type: string
+          description: '位置情報カテゴリー'
+          example: '本社・支社'
+          x-oapi-codegen-extra-tags:
+            db: location_category
+      required:
+        - prefecture
+        - city
+        - location_category
+    prefecture:
+      title: '都道府県'
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 都道府県id
+          example: 5
+          x-go-name: ID
+          x-oapi-codegen-extra-tags:
+            db: id
+        name:
+          type: string
+          description: 都道府県名
+          example: '東京都'
+          x-oapi-codegen-extra-tags:
+            db: name
+      required:
+        - id
+        - name
+    release_types:
+      title: 'リリースタイプ'
+      type: object
+      properties:
+        id:
+          type: integer
+          description: リリースタイプid
+          example: 5
+          x-go-name: ID
+          x-oapi-codegen-extra-tags:
+            db: release_type_id
+        name:
+          type: string
+          description: リリースタイプ名
+          example: 'イベント'
+          x-oapi-codegen-extra-tags:
+            db: release_type_name
+      required:
+        - id
+        - name
